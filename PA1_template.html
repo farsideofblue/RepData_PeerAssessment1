@@ -279,9 +279,49 @@ Im.medianStepsPerDay &lt;- median(Im.stepsPerDay[,2])
 <p>The original mean was 1.0766 &times; 10<sup>4</sup>. With the imputed values, it is 1.0766 &times; 10<sup>4</sup>.
 The mean stays the same, which makes sense given that is how the imputations were done.
 The original median was 1.0765 &times; 10<sup>4</sup>. With the imputed values, it is 1.0766 &times; 10<sup>4</sup>.
-The median, on the other hand, changes. </p>
+The median, on the other hand, changes. Before, the median was slightly lower.
+With new data points at the mean, this necessarily drags the median up.</p>
 
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
+
+<pre><code class="r">imputedData$date &lt;- as.Date(imputedData$date)
+imputedData$weekDay &lt;- weekdays(imputedData$date)
+imputedData$weekFactor &lt;- &quot;weekday&quot;
+imputedData[imputedData$weekDay == &quot;Saturday&quot; | imputedData$weekDay == &quot;Sunday&quot;,5] &lt;- &quot;weekend&quot;
+
+par(mfrow = c(2,1))
+Im.stepsPerTime &lt;- sqldf(&quot;SELECT interval, SUM(steps) AS NumberSteps FROM imputedData GROUP BY interval, weekFactor&quot;)
+Im.stepsPerTime[,3] &lt;- as.numeric(Im.stepsPerTime[,3])
+</code></pre>
+
+<pre><code>## Error: undefined columns selected
+</code></pre>
+
+<pre><code class="r">plot(Im.stepsPerTime[Im.stepsPerTime$weekFactor == &quot;weekend&quot;,1], Im.stepsPerTime[stepsPerTime$weekFactor == &quot;weekend&quot;,3], type = &quot;l&quot;, xlab = &quot;Time Intervals of 5 Minutes&quot;, ylab = &quot;Average Number of Steps&quot;, main = &quot;weekend&quot;)
+</code></pre>
+
+<pre><code>## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+</code></pre>
+
+<pre><code>## Error: need finite &#39;xlim&#39; values
+</code></pre>
+
+<pre><code class="r">plot(Im.stepsPerTime[Im.stepsPerTime$weekFactor == &quot;weekday&quot;,1], Im.stepsPerTime[stepsPerTime$weekFactor == &quot;weekday&quot;,3], type = &quot;l&quot;, xlab = &quot;Time Intervals of 5 Minutes&quot;, ylab = &quot;Average Number of Steps&quot;, main = &quot;weekday&quot;)
+</code></pre>
+
+<pre><code>## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+</code></pre>
+
+<pre><code>## Error: need finite &#39;xlim&#39; values
+</code></pre>
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAANgCAMAAAD3XIpKAAAABlBMVEX9/v39/v17TDFfAAAAAnRSTlP/AOW3MEoAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAeySURBVHic7dExDQAACMAw8G8aGRxrFSzZLEnzHcAP46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzI+yvgo46OMjzpz+6VbOomSNAAAAABJRU5ErkJggg==" alt="plot of chunk unnamed-chunk-6"/> </p>
 
 </body>
 

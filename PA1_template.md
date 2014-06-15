@@ -97,7 +97,54 @@ Im.medianStepsPerDay <- median(Im.stepsPerDay[,2])
 The original mean was 1.0766 &times; 10<sup>4</sup>. With the imputed values, it is 1.0766 &times; 10<sup>4</sup>.
 The mean stays the same, which makes sense given that is how the imputations were done.
 The original median was 1.0765 &times; 10<sup>4</sup>. With the imputed values, it is 1.0766 &times; 10<sup>4</sup>.
-The median, on the other hand, changes. 
+The median, on the other hand, changes. Before, the median was slightly lower.
+With new data points at the mean, this necessarily drags the median up.
 ## Are there differences in activity patterns between weekdays and weekends?
 
+```r
+imputedData$date <- as.Date(imputedData$date)
+imputedData$weekDay <- weekdays(imputedData$date)
+imputedData$weekFactor <- "weekday"
+imputedData[imputedData$weekDay == "Saturday" | imputedData$weekDay == "Sunday",5] <- "weekend"
+
+par(mfrow = c(2,1))
+Im.stepsPerTime <- sqldf("SELECT interval, SUM(steps) AS NumberSteps FROM imputedData GROUP BY interval, weekFactor")
+Im.stepsPerTime[,3] <- as.numeric(Im.stepsPerTime[,3])
+```
+
+```
+## Error: undefined columns selected
+```
+
+```r
+plot(Im.stepsPerTime[Im.stepsPerTime$weekFactor == "weekend",1], Im.stepsPerTime[stepsPerTime$weekFactor == "weekend",3], type = "l", xlab = "Time Intervals of 5 Minutes", ylab = "Average Number of Steps", main = "weekend")
+```
+
+```
+## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+```
+
+```
+## Error: need finite 'xlim' values
+```
+
+```r
+plot(Im.stepsPerTime[Im.stepsPerTime$weekFactor == "weekday",1], Im.stepsPerTime[stepsPerTime$weekFactor == "weekday",3], type = "l", xlab = "Time Intervals of 5 Minutes", ylab = "Average Number of Steps", main = "weekday")
+```
+
+```
+## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+## Warning: no non-missing arguments to min; returning Inf
+## Warning: no non-missing arguments to max; returning -Inf
+```
+
+```
+## Error: need finite 'xlim' values
+```
+
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
 

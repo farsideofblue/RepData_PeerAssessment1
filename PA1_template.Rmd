@@ -66,5 +66,18 @@ The original median was `r medianStepsPerDay`. With the imputed values, it is `r
 The median, on the other hand, changes. Before, the median was slightly lower.
 With new data points at the mean, this necessarily drags the median up.
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r fig.width=7, fig.height=12}
+imputedData$date <- as.Date(imputedData$date)
+imputedData$weekDay <- weekdays(imputedData$date)
+imputedData$weekFactor <- "weekday"
+imputedData[imputedData$weekDay == "Saturday" | imputedData$weekDay == "Sunday",5] <- "weekend"
 
+par(mfrow = c(2,1))
+Im.stepsPerTime <- sqldf("SELECT interval, SUM(steps) AS NumberSteps FROM imputedData GROUP BY interval, weekFactor")
+Im.stepsPerTime[,3] <- as.numeric(Im.stepsPerTime[,3])
+
+plot(Im.stepsPerTime[Im.stepsPerTime$weekFactor == "weekend",1], Im.stepsPerTime[stepsPerTime$weekFactor == "weekend",3], type = "l", xlab = "Time Intervals of 5 Minutes", ylab = "Average Number of Steps", main = "weekend")
+                                                                          
+plot(Im.stepsPerTime[Im.stepsPerTime$weekFactor == "weekday",1], Im.stepsPerTime[stepsPerTime$weekFactor == "weekday",3], type = "l", xlab = "Time Intervals of 5 Minutes", ylab = "Average Number of Steps", main = "weekday")
+```
 
